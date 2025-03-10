@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import { nanoid } from 'nanoid';
 
@@ -29,6 +29,7 @@ function App() {
   );
 
   const [previewVisible, setPreviewVisibility] = useState(true);
+  const previewRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem('cvFormData', JSON.stringify(formData));
@@ -40,6 +41,59 @@ function App() {
 
   const printPreview = () => {
     window.print();
+  };
+
+  const downloadPdf = async () => {
+    try {
+      // Get the preview container
+      const element = document.querySelector('.preview__printable');
+      
+      // Check if element exists
+      if (!element) {
+        console.error('Preview element not found');
+        return;
+      }
+
+      // PDF filename - use first and last name if available
+      const firstName = formData.basicInfo.firstName || 'CV';
+      const lastName = formData.basicInfo.lastName || 'Resume';
+      const fileName = `${firstName}_${lastName}.pdf`;
+
+      // Create a clone of the element to avoid modifying the original
+      const clone = element.cloneNode(true);
+      
+      // Temporarily append to body but hide it
+      clone.style.position = 'absolute';
+      clone.style.left = '-9999px';
+      document.body.appendChild(clone);
+
+      // PDF options
+      const options = {
+        margin: [10, 10, 10, 10],
+        filename: fileName,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true,
+          logging: false, // Disable logging
+          letterRendering: true // Improve text quality
+        },
+        jsPDF: { 
+          unit: 'mm', 
+          format: 'a4', 
+          orientation: 'portrait',
+          compress: true
+        }
+      };
+
+      // Generate PDF
+      await window.html2pdf().set(options).from(clone).save();
+      
+      // Clean up
+      document.body.removeChild(clone);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
   };
 
   const handleBasicInfoChanges = (e) => {
@@ -145,7 +199,7 @@ function App() {
         submitCategoryInfo={submitCategoryInfo}
         deleteCategoryInfo={deleteCategoryInfo}
       />
-      {previewVisible && <Preview formData={formData} />}
+      {previewVisible && <Preview ref={previewRef} formData={formData} />}
       <div className="btn-container__preview">
         <button
           className="btn__toggle-preview material-symbols-outlined"
@@ -155,13 +209,23 @@ function App() {
           visibility
         </button>
         {previewVisible && (
-          <button
-            type="button"
-            className="btn__print-preview material-symbols-outlined"
-            onClick={printPreview}
-          >
-            print
-          </button>
+          <>
+            <button
+              type="button"
+              className="btn__print-preview material-symbols-outlined"
+              onClick={printPreview}
+            >
+              print
+            </button>
+            <button
+              type="button"
+              className="btn__download-pdf material-symbols-outlined"
+              onClick={downloadPdf}
+              title="Download as PDF"
+            >
+              download
+            </button>
+          </>
         )}
       </div>
     </div>

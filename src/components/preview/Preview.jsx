@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import BasicInfoView from './BasicInfoView';
 import ContactInfoView from './ContactInfoView';
 import EducationInfoView from './EducationInfoView';
@@ -5,12 +6,12 @@ import ExperienceInfoView from './ExperienceInfoView';
 import SkillsInfoView from './SkillsInfoView';
 import OtherInfoView from './OtherInfoView';
 
-function Preview(props) {
+const Preview = forwardRef((props, ref) => {
   const { formData } = props;
 
   return (
     <div className="preview__container">
-      <main className="preview__printable">
+      <main className="preview__printable" ref={ref}>
         <BasicInfoView data={formData.basicInfo} />
         <ContactInfoView data={formData.contactInfo} />
 
@@ -26,6 +27,6 @@ function Preview(props) {
       </main>
     </div>
   );
-}
+});
 
 export default Preview;
