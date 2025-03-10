@@ -31,7 +31,7 @@ This CV Generator is a web application that allows users to create professional-
 In order to setup and work on this project on your own, you will need to:
 
 1. Clone this project:  
-   `git clone https://github.com/yourusername/cv-generator.git`
+   `git clone https://github.com/ian933024/cv-builder.git`
 
 2. Once you have cloned this project, you can install the required dependencies by using:  
    `npm install`
