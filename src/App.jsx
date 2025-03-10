@@ -29,18 +29,43 @@ function App() {
   );
 
   const [previewVisible, setPreviewVisibility] = useState(true);
+  const [menuActive, setMenuActive] = useState(false);
   const previewRef = useRef(null);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem('cvFormData', JSON.stringify(formData));
   }, [formData]);
 
+  useEffect(() => {
+    // Add event listener to close menu when clicking outside
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuActive(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, []);
+
+  const toggleMenu = () => {
+    setMenuActive(prevState => !prevState);
+  };
+
   const togglePreview = () => {
     setPreviewVisibility((prevState) => !prevState);
+    setMenuActive(false);
   };
 
   const printPreview = () => {
     window.print();
+    setMenuActive(false);
   };
 
   const downloadPdf = async () => {
@@ -91,6 +116,7 @@ function App() {
       
       // Clean up
       document.body.removeChild(clone);
+      setMenuActive(false);
     } catch (error) {
       console.error('Error generating PDF:', error);
     }
@@ -134,6 +160,8 @@ function App() {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       }, 100);
+      
+      setMenuActive(false);
     } catch (error) {
       // eslint-disable-next-line no-alert
       alert(`Error saving CV data: ${error.message}`);
@@ -180,6 +208,7 @@ function App() {
       };
       
       reader.readAsText(file);
+      setMenuActive(false);
     } catch (error) {
       // eslint-disable-next-line no-alert
       alert(`Error loading CV data: ${error.message}`);
@@ -290,11 +319,12 @@ function App() {
         deleteCategoryInfo={deleteCategoryInfo}
       />
       {previewVisible && <Preview ref={previewRef} formData={formData} />}
-      <div className="btn-container__preview">
+      <div className={`btn-container__preview ${menuActive ? 'active' : ''}`} ref={menuRef}>
         <button
           className="btn__menu material-symbols-outlined"
           type="button"
           title="Menu"
+          onClick={toggleMenu}
         >
           menu
         </button>

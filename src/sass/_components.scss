@@ -48,23 +48,40 @@
     display: flex;
     flex-direction: row;
     border-radius: 50px;
-    overflow: hidden;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    overflow: visible;
     transition: all 0.3s ease;
     z-index: 1000;
     
     // Folding buttons - only show main button initially
     .action-buttons {
       display: flex;
-      width: 0;
       overflow: hidden;
-      transition: width 0.5s ease;
+      transition: all 0.3s ease;
+      border-radius: 50px;
+      box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     }
     
-    // Show all buttons when hovered
-    &:hover .action-buttons {
-      width: 275px; // Adjust as needed for your buttons
+    // Desktop styles
+    @media screen and (min-width: 769px) {
+      .action-buttons {
+        width: 0;
+      }
+      
+      &:hover .action-buttons {
+        width: 275px; // Adjust as needed for your buttons
+      }
+      
+      .btn__menu {
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+          rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+        border-radius: 50%;
+      }
+    }
+    
+    // Mobile styles
+    &.active .action-buttons {
+      display: flex;
     }
   }
 

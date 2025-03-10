@@ -2,14 +2,20 @@
   &__container {
     position: relative;
     color: var(--color-text);
-    // width: clamp(300px, 50%, 816px);
     width: 100%;
     flex-grow: 1;
     background-color: var(--color-background-preview);
-
     display: flex;
     align-items: center;
     justify-content: center;
+    
+    @media screen and (max-width: 768px) {
+      padding: 15px;
+    }
+    
+    @media screen and (max-width: 480px) {
+      padding: 10px;
+    }
   }
 
   &__printable {
@@ -27,6 +33,11 @@
     font-family: var(--font-raleway);
     color: black;
     line-height: normal;
+    
+    // Scale for mobile devices in the preview mode
+    @media screen and (max-width: 768px) {
+      transform-origin: center;
+    }
   }
 
   &__main-col {
