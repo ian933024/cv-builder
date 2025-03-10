@@ -14,7 +14,11 @@ Features:
 
 3. Preview your CV at any time to make sure it looks presentable and fitting to your needs
 
-4. Responsive design that allows you to create a CV even through your phone
+4. Save your CV data to a file and load it later to continue editing
+
+5. Download your finished CV as a PDF or print it directly
+
+6. Responsive design that allows you to create a CV even through your phone
 
 ### Built With
 
@@ -50,6 +54,21 @@ CV Generator on dark mode
 ![view 2](img/cv-light-mode-view.png)
 CV Generator on light mode
 
+### How to Use the Save/Load Feature
+
+1. **Saving Your CV Data**:
+   - Fill out your CV information as needed
+   - Click the blue save button (💾) at the bottom right of the screen
+   - Your CV data will be downloaded as a JSON file to your computer
+
+2. **Loading Your CV Data**:
+   - Click the orange upload button (📤) at the bottom right of the screen
+   - Select the previously saved JSON file from your computer
+   - Your CV will be populated with the saved data
+
+This feature allows you to save your work in progress and continue working on your CV later, even after closing the browser or turning off your computer.
+
 ---
 
-Developed by **Renchester Ramos**
+Originally developed by **Renchester Ramos**  
+Modified by **Hung-Yi Yu**

@@ -43,13 +43,16 @@ function Editor(props) {
           Create your CV by filling out the forms below! Your CV will be
           dynamically updated in the preview.
         </p>
-        <a
-          className="header-github"
-          href="https://github.com/renchester/cv-generator"
-          rel="noopener noreferrer"
-        >
-          Check out the Github repo for this project here
-        </a>
+        <div className="header-github">
+          <a
+            href="https://github.com/renchester/cv-generator"
+            rel="noopener noreferrer"
+          >
+            Original Github repo
+          </a>
+          {" | "}
+          <span>Modify by: Hung-Yi Yu</span>
+        </div>
 
         <div className="switch">
           <input

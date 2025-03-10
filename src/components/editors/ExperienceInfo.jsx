@@ -222,7 +222,7 @@ function ExperienceInfo(props) {
         </label>
       </fieldset>
       <button type="submit" className="btn btn__submit">
-        Submit work experience
+        Add work experience
       </button>
     </form>
   );

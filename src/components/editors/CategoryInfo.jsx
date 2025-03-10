@@ -179,7 +179,7 @@ function CategoryInfo(props) {
       </fieldset>
 
       <button type="submit" className="btn btn__submit">
-        Submit {infoType === 'skillsInfo' ? 'skill info' : 'info'}
+        Add {infoType === 'skillsInfo' ? 'skill info' : 'info'}
       </button>
     </form>
   );

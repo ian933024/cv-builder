@@ -51,16 +51,39 @@
     overflow: hidden;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
       rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    
+    // Folding buttons - only show main button initially
+    .action-buttons {
+      display: flex;
+      width: 0;
+      overflow: hidden;
+      transition: width 0.5s ease;
+    }
+    
+    // Show all buttons when hovered
+    &:hover .action-buttons {
+      width: 275px; // Adjust as needed for your buttons
+    }
   }
 
+  &__menu,
   &__toggle-preview,
   &__print-preview,
-  &__download-pdf {
+  &__download-pdf,
+  &__save-data,
+  &__load-data {
     opacity: 0.8;
     padding: 15px;
     background-color: var(--color-button);
     color: var(--color-text-light);
     font-size: 35px;
+    cursor: pointer;
+    min-width: 55px; // Ensure consistent width
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &:hover,
     &:focus {
@@ -76,6 +99,37 @@
     &:hover,
     &:focus {
       background-color: #45a049; /* Darker green on hover */
+    }
+  }
+  
+  &__save-data {
+    background-color: #2196F3; /* Blue background for save button */
+    
+    &:hover,
+    &:focus {
+      background-color: #0b7dda; /* Darker blue on hover */
+    }
+  }
+  
+  &__load-data {
+    background-color: #ff9800; /* Orange background for load button */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover,
+    &:focus {
+      background-color: #e68a00; /* Darker orange on hover */
+    }
+  }
+  
+  &__menu {
+    background-color: #673AB7; /* Purple background for menu button */
+    z-index: 1;
+    
+    &:hover,
+    &:focus {
+      background-color: #5E35B1; /* Darker purple on hover */
     }
   }
 }

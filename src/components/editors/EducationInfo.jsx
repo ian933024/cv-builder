@@ -235,7 +235,7 @@ function EducationInfo(props) {
         </label>
       </fieldset>
       <button type="submit" className="btn btn__submit">
-        Submit education background
+        Add education background
       </button>
     </form>
   );

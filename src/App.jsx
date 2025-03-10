@@ -95,6 +95,96 @@ function App() {
       console.error('Error generating PDF:', error);
     }
   };
+  
+  // Save CV data to a file
+  const saveToFile = () => {
+    try {
+      // Get all CV data
+      const data = {
+        formData,
+        // Include any other data that's stored in localStorage
+        educationInfo: JSON.parse(localStorage.getItem('cvEducationInfo')) || {},
+        experienceInfo: JSON.parse(localStorage.getItem('cvExperienceInfo')) || {},
+        skillsInfo: JSON.parse(localStorage.getItem('cvskillsInfo')) || {},
+        otherInfo: JSON.parse(localStorage.getItem('cvotherInfo')) || {},
+        isDarkMode: JSON.parse(localStorage.getItem('isDarkMode')) || false
+      };
+      
+      // Convert to JSON string
+      const jsonData = JSON.stringify(data, null, 2);
+      
+      // Create blob and download link
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      // Create file name
+      const firstName = formData.basicInfo.firstName || 'CV';
+      const lastName = formData.basicInfo.lastName || 'Data';
+      const fileName = `${firstName}_${lastName}_data.json`;
+      
+      // Create download link and trigger click
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      
+      // Clean up
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+    } catch (error) {
+      // eslint-disable-next-line no-alert
+      alert(`Error saving CV data: ${error.message}`);
+    }
+  };
+  
+  // Load CV data from a file
+  const loadFromFile = (event) => {
+    try {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          // Update form data
+          if (data.formData) {
+            setFormData(data.formData);
+          }
+          
+          // Update other localStorage items
+          if (data.educationInfo) localStorage.setItem('cvEducationInfo', JSON.stringify(data.educationInfo));
+          if (data.experienceInfo) localStorage.setItem('cvExperienceInfo', JSON.stringify(data.experienceInfo));
+          if (data.skillsInfo) localStorage.setItem('cvskillsInfo', JSON.stringify(data.skillsInfo));
+          if (data.otherInfo) localStorage.setItem('cvotherInfo', JSON.stringify(data.otherInfo));
+          if (data.isDarkMode !== undefined) localStorage.setItem('isDarkMode', JSON.stringify(data.isDarkMode));
+          
+          // Reset the file input
+          const fileInput = event.target;
+          fileInput.value = '';
+          
+          // eslint-disable-next-line no-alert
+          alert('CV data loaded successfully!');
+          
+          // Refresh the page to ensure all components update with the new data
+          window.location.reload();
+        } catch (parseError) {
+          // eslint-disable-next-line no-alert
+          alert(`Error parsing CV data file: ${parseError.message}`);
+        }
+      };
+      
+      reader.readAsText(file);
+    } catch (error) {
+      // eslint-disable-next-line no-alert
+      alert(`Error loading CV data: ${error.message}`);
+    }
+  };
 
   const handleBasicInfoChanges = (e) => {
     const { name, value } = e.target;
@@ -202,31 +292,59 @@ function App() {
       {previewVisible && <Preview ref={previewRef} formData={formData} />}
       <div className="btn-container__preview">
         <button
-          className="btn__toggle-preview material-symbols-outlined"
+          className="btn__menu material-symbols-outlined"
           type="button"
-          onClick={togglePreview}
+          title="Menu"
         >
-          visibility
+          menu
         </button>
-        {previewVisible && (
-          <>
-            <button
-              type="button"
-              className="btn__print-preview material-symbols-outlined"
-              onClick={printPreview}
-            >
-              print
-            </button>
-            <button
-              type="button"
-              className="btn__download-pdf material-symbols-outlined"
-              onClick={downloadPdf}
-              title="Download as PDF"
-            >
-              download
-            </button>
-          </>
-        )}
+        <div className="action-buttons">
+          <button
+            type="button"
+            className="btn__toggle-preview material-symbols-outlined"
+            onClick={togglePreview}
+            title="Toggle Preview"
+          >
+            visibility
+          </button>
+          <button
+            type="button"
+            className="btn__print-preview material-symbols-outlined"
+            onClick={printPreview}
+            title="Print CV"
+            disabled={!previewVisible}
+            style={{ opacity: previewVisible ? 0.8 : 0.3 }}
+          >
+            print
+          </button>
+          <button
+            type="button"
+            className="btn__download-pdf material-symbols-outlined"
+            onClick={downloadPdf}
+            title="Download as PDF"
+            disabled={!previewVisible}
+            style={{ opacity: previewVisible ? 0.8 : 0.3 }}
+          >
+            download
+          </button>
+          <button
+            type="button"
+            className="btn__save-data material-symbols-outlined"
+            onClick={saveToFile}
+            title="Save CV Data"
+          >
+            save
+          </button>
+          <label className="btn__load-data material-symbols-outlined" title="Load CV Data">
+            upload
+            <input 
+              type="file" 
+              accept=".json" 
+              onChange={loadFromFile} 
+              style={{ display: 'none' }} 
+            />
+          </label>
+        </div>
       </div>
     </div>
   );
